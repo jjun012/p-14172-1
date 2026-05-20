@@ -21,7 +21,7 @@ public class ApiV1PostController {
 
         return items
                 .stream()
-                .map(post -> new PostDto(post)) // PostDto로 변환
+                .map(PostDto::new)
                 .toList();
     }
 
