@@ -52,7 +52,7 @@ public class ApiV1PostController {
                 "%d번 글이 삭제되었습니다.".formatted(id)
         );
     }
-    public record PostWriteForm(
+    public record PostWriteReqBody(
             @NotBlank
             @Size(min = 2, max = 100)
             String title,
@@ -64,7 +64,7 @@ public class ApiV1PostController {
 
     @PostMapping
     @Transactional
-    public RsData<PostDto> write(@Valid @RequestBody PostWriteForm form) {
+    public RsData<PostDto> write(@Valid @RequestBody PostWriteReqBody form) {
         Post post = postService.write(form.title, form.content);
 
         return new RsData<>(
