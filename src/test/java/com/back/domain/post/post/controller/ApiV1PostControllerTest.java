@@ -11,6 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -42,5 +44,22 @@ public class ApiV1PostControllerTest {
                 ).andDo(print()); // 응답결과를 출력합니다.
         resultActions
                 .andExpect(status().isCreated()); // 201 Created 상태코드 검증
+    }
+    @Test
+    @DisplayName("글 수정")
+    void t2() throws Exception {
+        ResultActions resultActions = mockMvc
+                .perform(
+                        put("/api/v1/posts/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("""
+                                        {
+                                            "title": "제목 수정",
+                                            "content": "내용 수정"
+                                        }
+                                        """)
+                ).andDo(print()); // 응답결과를 출력합니다.
+        resultActions
+                .andExpect(status().isOk()); // 201 Created 상태코드 검증
     }
 }
