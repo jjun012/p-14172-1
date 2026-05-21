@@ -28,7 +28,7 @@ public class ApiV1PostControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @DisplayName("글 쓰기")
+    @DisplayName("글 작성")
     void t1() throws Exception {
         // 회원가입 요청을 보냅니다.
         ResultActions resultActions = mockMvc
