@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("test")
@@ -43,6 +44,8 @@ public class ApiV1PostControllerTest {
                                         """)
                 ).andDo(print()); // 응답결과를 출력합니다.
         resultActions
+                .andExpect(handler().handlerType(ApiV1PostController.class))
+                .andExpect(handler().methodName("write"))
                 .andExpect(status().isCreated()); // 201 Created 상태코드 검증
     }
     @Test
