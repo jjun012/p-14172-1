@@ -1,6 +1,8 @@
 package com.back.domain.post.post.controller;
 
 
+import com.back.domain.post.post.entity.Post;
+import com.back.domain.post.post.service.PostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -27,6 +28,8 @@ public class ApiV1PostControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private PostService postService;
 
     @Test
     @DisplayName("글 작성")
@@ -42,12 +45,20 @@ public class ApiV1PostControllerTest {
                                             "content": "내용"
                                         }
                                         """)
-                ).andDo(print()); // 응답결과를 출력합니다.
+                ).andDo(print());
+        Post post = postService.findLatest().get();
+        long totalCount = postService.count();
+
         resultActions
                 .andExpect(handler().handlerType(ApiV1PostController.class))
                 .andExpect(handler().methodName("write"))
-                .andExpect(status().isCreated()); // 201 Created 상태코드 검증
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.resultCode").value("201-1"))
+                .andExpect(jsonPath("$.msg").value("%d번 글이 작성되었습니다.".formatted(post.getId())))
+                .andExpect(jsonPath("$.data.totalCount").value(totalCount))
+                .andExpect(jsonPath("$.data.post.id").value(post.getId()));
     }
+
     @Test
     @DisplayName("글 수정")
     void t2() throws Exception {
