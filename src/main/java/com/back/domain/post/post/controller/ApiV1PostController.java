@@ -3,6 +3,9 @@ package com.back.domain.post.post.controller;
 import com.back.domain.post.post.dto.PostDto;
 import com.back.domain.post.post.entity.Post;
 import com.back.domain.post.post.service.PostService;
+import com.back.domain.post.postComment.controller.ApiV1PostCommentController;
+import com.back.domain.post.postComment.dto.PostCommentDto;
+import com.back.domain.post.postComment.entity.PostComment;
 import com.back.global.rsData.ForPostRsData;
 import com.back.global.rsData.RsData;
 import jakarta.validation.Valid;
@@ -89,5 +92,28 @@ public class ApiV1PostController {
                         new PostDto(post)
                 )
         );
+    }
+    record PostModifyReqBody(
+            @NotBlank
+            @Size(min = 2, max = 100)
+            String title,
+            @NotBlank
+            @Size(min = 2, max = 100)
+            String content
+    ) {
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public RsData<Void> modify(
+            @RequestBody @Valid PostModifyReqBody reqBody,
+            @PathVariable int id
+    ){
+        Post post = postService.findById(id).get();
+
+        postService.modify(post, reqBody.title,reqBody.content);
+        return new RsData<>(
+                "200-1",
+                "%d번 댓글이 수정되었습니다.".formatted(post.getId()));
     }
 }
