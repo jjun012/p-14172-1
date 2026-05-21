@@ -14,6 +14,7 @@ import java.util.Optional;
 public class PostService {
     private final PostRepository postRepository;
 
+
     public long count() {
         return postRepository.count();
     }
