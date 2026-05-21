@@ -5,6 +5,7 @@ import com.back.domain.post.post.service.PostService;
 import com.back.domain.post.postComment.dto.PostCommentDto;
 import com.back.domain.post.postComment.entity.PostComment;
 import com.back.global.rsData.RsData;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
@@ -64,5 +65,27 @@ public class ApiV1PostCommentController {
                 "%d번 댓글이 삭제되었습니다.".formatted(postComment.getId()),
                 new PostCommentDto(postComment)
         );
+    }
+
+    record PostCommentModifyReqBody(
+            @NotBlank
+            @Size(min = 2, max = 100)
+            String content
+    ) {
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public RsData<Void> modify(
+            @PathVariable int postId,
+            @PathVariable int id,
+            @RequestBody @Valid PostCommentModifyReqBody reqBody
+    ){
+        Post post = postService.findById(postId).get();
+        PostComment postComment = post.findCommentById(id).get();
+        postService.modifyComment(postComment,reqBody.content);
+        return new RsData<>(
+                "200-1",
+                "%d번 댓글이 수정되었습니다.".formatted(postComment.getId()));
     }
 }
