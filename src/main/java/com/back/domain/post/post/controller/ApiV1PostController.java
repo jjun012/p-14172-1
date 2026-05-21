@@ -75,22 +75,19 @@ public class ApiV1PostController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<RsData<PostWriteResBody>> write(@Valid @RequestBody PostWriteReqBody form) {
+    public RsData<PostWriteResBody> write(@Valid @RequestBody PostWriteReqBody form) {
         Post post = postService.write(form.title, form.content);
         long totalCount=postService.count();
 
 
 
-        return new ResponseEntity<>(
-                new RsData<>(
-                        "201-1",
-                        "%d번 글이 생성되었습니다.".formatted(post.getId()),
-                        new PostWriteResBody(
-                                totalCount,
-                                new PostDto(post)
-                        )
-                ),
-                HttpStatus.CREATED
+        return new RsData<>(
+                "201-1",
+                "%d번 글이 생성되었습니다.".formatted(post.getId()),
+                new PostWriteResBody(
+                        totalCount,
+                        new PostDto(post)
+                )
         );
     }
 }
