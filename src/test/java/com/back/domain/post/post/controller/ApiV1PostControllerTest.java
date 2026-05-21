@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 @ActiveProfiles("test")
@@ -36,6 +37,6 @@ public class ApiV1PostControllerTest {
                                             "content": "내용"
                                         }
                                         """)
-                );
+                ).andDo(print()); // 응답결과를 출력합니다.
     }
 }
