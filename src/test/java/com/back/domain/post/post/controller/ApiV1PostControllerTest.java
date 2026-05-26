@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ApiV1PostControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    private MockMvc mvc;
     @Autowired
     private PostService postService;
 
@@ -36,7 +36,7 @@ public class ApiV1PostControllerTest {
     @DisplayName("글 작성")
     void t1() throws Exception {
         // 회원가입 요청을 보냅니다.
-        ResultActions resultActions = mockMvc
+        ResultActions resultActions = mvc
                 .perform(
                         post("/api/v1/posts")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -67,7 +67,7 @@ public class ApiV1PostControllerTest {
     @DisplayName("글 수정")
     void t2() throws Exception {
         int id=1;
-        ResultActions resultActions = mockMvc
+        ResultActions resultActions = mvc
                 .perform(
                         put("/api/v1/posts/"+id)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -90,7 +90,7 @@ public class ApiV1PostControllerTest {
     void t3() throws Exception {
         int id = 1;
 
-        ResultActions resultActions = mockMvc
+        ResultActions resultActions = mvc
                 .perform(
                         delete("/api/v1/posts/" + id)
                 )
@@ -102,5 +102,26 @@ public class ApiV1PostControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultCode").value("200-1"))
                 .andExpect(jsonPath("$.msg").value("%d번 글이 삭제되었습니다.".formatted(id)));
+    }
+    @Test
+    @DisplayName("글 단건조회")
+    void t4() throws Exception {
+        int id = 1;
+
+        ResultActions resultActions = mvc
+                .perform(
+                        get("/api/v1/posts/" + id)
+                )
+                .andDo(print());
+
+        resultActions
+                .andExpect(handler().handlerType(ApiV1PostController.class))
+                .andExpect(handler().methodName("getItem"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.createDate").isString())
+                .andExpect(jsonPath("$.modifyDate").isString())
+                .andExpect(jsonPath("$.title").isString())
+                .andExpect(jsonPath("$.content").isString());
     }
 }
