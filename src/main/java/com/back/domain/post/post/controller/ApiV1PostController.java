@@ -70,27 +70,16 @@ public class ApiV1PostController {
     ) {
     }
 
-    public record PostWriteResBody(
-            long totalCount,
-            PostDto post
-    ){
-    }
 
     @PostMapping
     @Transactional
-    public RsData<PostWriteResBody> write(@Valid @RequestBody PostWriteReqBody form) {
+    public RsData<PostDto> write(@Valid @RequestBody PostWriteReqBody form) {
         Post post = postService.write(form.title, form.content);
-        long totalCount=postService.count();
-
-
 
         return new RsData<>(
                 "201-1",
                 "%d번 글이 작성되었습니다.".formatted(post.getId()),
-                new PostWriteResBody(
-                        totalCount,
                         new PostDto(post)
-                )
         );
     }
     record PostModifyReqBody(
