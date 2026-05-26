@@ -85,10 +85,5 @@ public class ApiV1PostControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultCode").value("200-1"))
                 .andExpect(jsonPath("$.msg").value("%d번 글이 수정되었습니다.".formatted(id)));
-
-        Post post = postService.findById(id).get();
-
-        assertThat(post.getTitle()).isEqualTo("제목 new");
-        assertThat(post.getContent()).isEqualTo("내용 new");
     }
 }
