@@ -134,13 +134,13 @@ public class ApiV1PostControllerTest {
                         get("/api/v1/posts")
                 )
                 .andDo(print());
+        List<Post> posts = postService.findAll();
 
         resultActions
                 .andExpect(handler().handlerType(ApiV1PostController.class))
                 .andExpect(handler().methodName("getItems"))
-                .andExpect(status().isOk());
-
-        List<Post> posts = postService.findAll();
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(posts.size()));
 
         for (int i = 0; i < posts.size(); i++) {
             Post post = posts.get(i);
