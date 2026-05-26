@@ -66,9 +66,10 @@ public class ApiV1PostControllerTest {
     @Test
     @DisplayName("글 수정")
     void t2() throws Exception {
+        int id=1;
         ResultActions resultActions = mockMvc
                 .perform(
-                        put("/api/v1/posts/1")
+                        put("/api/v1/posts/"+id)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
                                         {
@@ -78,6 +79,10 @@ public class ApiV1PostControllerTest {
                                         """)
                 ).andDo(print()); // 응답결과를 출력합니다.
         resultActions
-                .andExpect(status().isOk()); // 201 Created 상태코드 검증
+                .andExpect(handler().handlerType(ApiV1PostController.class))
+                .andExpect(handler().methodName("modify"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.resultCode").value("200-1"))
+                .andExpect(jsonPath("$.msg").value("%d번 글이 수정되었습니다.".formatted(id)));
     }
 }
