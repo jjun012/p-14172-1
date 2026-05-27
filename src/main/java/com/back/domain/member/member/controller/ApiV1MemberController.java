@@ -3,6 +3,7 @@ package com.back.domain.member.member.controller;
 import com.back.domain.member.member.dto.MemberDto;
 import com.back.domain.member.member.entity.Member;
 import com.back.domain.member.member.service.MemberService;
+import com.back.domain.post.post.dto.PostDto;
 import com.back.global.rsData.RsData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,7 +33,7 @@ public class ApiV1MemberController {
             String name
     ) {
     }
-    @PostMapping
+    @PostMapping("/join")
     @Transactional
     @Operation(summary = "회원가입")
     public RsData<Void> join(@Valid @RequestBody MemberJoinReqBody reqBody) {
