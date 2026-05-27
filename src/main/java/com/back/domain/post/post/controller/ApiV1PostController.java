@@ -3,27 +3,15 @@ package com.back.domain.post.post.controller;
 import com.back.domain.post.post.dto.PostDto;
 import com.back.domain.post.post.entity.Post;
 import com.back.domain.post.post.service.PostService;
-import com.back.domain.post.postComment.controller.ApiV1PostCommentController;
-import com.back.domain.post.postComment.dto.PostCommentDto;
-import com.back.domain.post.postComment.entity.PostComment;
-import com.back.global.rsData.ForPostRsData;
 import com.back.global.rsData.RsData;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -32,7 +20,7 @@ public class ApiV1PostController {
     private final PostService postService;
 
 
-    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    @GetMapping
     @Transactional(readOnly = true)
     public List<PostDto> getItems() {
         List<Post> items = postService.findAll();
@@ -43,7 +31,7 @@ public class ApiV1PostController {
                 .toList();
     }
 
-    @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+    @GetMapping("/{id}")
     @Transactional(readOnly = true)
     public PostDto getItem(@PathVariable int id) {
         Post post = postService.findById(id).get();
